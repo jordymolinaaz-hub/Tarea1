@@ -1,142 +1,212 @@
-import os
-import subprocess
-
 """
-Dashboard de Programación Orientada a Objetos
-Permite visualizar y ejecutar scripts organizados por unidades y subcarpetas.
 Autor: Jordy Molina
-Curso: Programación Orientada a Objetos
+Asignatura: POO
+Descripción:
+Este programa permite gestionar un inventario de productos mediante un
+menú interactivo en consola. Se pueden agregar, eliminar, actualizar,
+buscar y mostrar productos.
 """
 
-def mostrar_codigo(ruta_script):
+
+class Producto:
     """
-    Muestra el contenido del script seleccionado.
+    Clase Producto
+    Representa un producto dentro del inventario.
     """
-    ruta_script_absoluta = os.path.abspath(ruta_script)
-    try:
-        with open(ruta_script_absoluta, 'r', encoding='utf-8') as archivo:
-            codigo = archivo.read()
-            print(f"\n--- Código de {os.path.basename(ruta_script)} ---\n")
-            print(codigo)
-            return codigo
-    except FileNotFoundError:
-        print("❌ El archivo no se encontró.")
-    except Exception as e:
-        print(f"❌ Error al leer el archivo: {e}")
-    return None
+
+    def __init__(self, id, nombre, cantidad, precio):
+        """
+        Constructor de la clase Producto
+        :param id: Identificador único del producto
+        :param nombre: Nombre del producto
+        :param cantidad: Cantidad disponible
+        :param precio: Precio del producto
+        """
+        self.id = id
+        self.nombre = nombre
+        self.cantidad = cantidad
+        self.precio = precio
+
+    def actualizar(self, cantidad, precio):
+        """
+        Actualiza la cantidad y el precio del producto
+        """
+        self.cantidad = cantidad
+        self.precio = precio
+
+    def __str__(self):
+        """
+        Retorna la información del producto en formato texto
+        """
+        return f"ID: {self.id} | Nombre: {self.nombre} | Cantidad: {self.cantidad} | Precio: ${self.precio}"
 
 
-def ejecutar_codigo(ruta_script):
+class Inventario:
     """
-    Ejecuta el script seleccionado en una nueva ventana de consola.
+    Clase Inventario
+    Gestiona la lista de productos
     """
-    try:
-        if os.name == 'nt':  # Windows
-            subprocess.Popen(['cmd', '/k', 'python', ruta_script])
-        else:  # Linux / macOS
-            subprocess.Popen(['xterm', '-hold', '-e', 'python3', ruta_script])
-    except Exception as e:
-        print(f"❌ Error al ejecutar el script: {e}")
 
+    def __init__(self):
+        """
+        Constructor de la clase Inventario
+        """
+        self.productos = []
 
-def mostrar_menu():
-    """
-    Menú principal del dashboard.
-    """
-    ruta_base = os.path.dirname(__file__)
+    def agregar_producto(self, producto):
+        """
+        Agrega un producto al inventario validando que el ID sea único
+        """
+        for p in self.productos:
+            if p.id == producto.id:
+                return False
+        self.productos.append(producto)
+        return True
 
-    # Se pueden agregar más unidades fácilmente
-    unidades = {
-        '1': 'Unidad 1',
-        '2': 'Unidad 2',
-        '3': 'Proyectos Personales'
-    }
+    def eliminar_producto(self, id):
+        """
+        Elimina un producto del inventario por su ID
+        """
+        for p in self.productos:
+            if p.id == id:
+                self.productos.remove(p)
+                return True
+        return False
 
-    while True:
-        print("\n===== DASHBOARD PRINCIPAL =====")
-        for key, value in unidades.items():
-            print(f"{key} - {value}")
-        print("0 - Salir")
+    def actualizar_producto(self, id, cantidad, precio):
+        """
+        Actualiza la cantidad y el precio de un producto por su ID
+        """
+        for p in self.productos:
+            if p.id == id:
+                p.actualizar(cantidad, precio)
+                return True
+        return False
 
-        eleccion = input("Seleccione una opción: ")
+    def buscar_por_nombre(self, nombre):
+        """
+        Busca productos cuyo nombre coincida total o parcialmente
+        """
+        encontrado = False
+        for p in self.productos:
+            if nombre.lower() in p.nombre.lower():
+                print(p)
+                encontrado = True
+        if not encontrado:
+            print("No se encontraron productos.")
 
-        if eleccion == '0':
-            print("👋 Saliendo del dashboard...")
-            break
-        elif eleccion in unidades:
-            ruta_unidad = os.path.join(ruta_base, unidades[eleccion])
-            mostrar_sub_menu(ruta_unidad)
+    def mostrar_todos(self):
+        """
+        Muestra todos los productos del inventario
+        """
+        if not self.productos:
+            print("Inventario vacío.")
         else:
-            print("⚠ Opción no válida.")
+            for p in self.productos:
+                print(p)
 
 
-def mostrar_sub_menu(ruta_unidad):
+class Menu:
     """
-    Muestra las subcarpetas de una unidad.
+    Clase Menu
+    Controla la interacción con el usuario
     """
-    if not os.path.exists(ruta_unidad):
-        print("⚠ La unidad no existe.")
-        return
 
-    sub_carpetas = [f.name for f in os.scandir(ruta_unidad) if f.is_dir()]
+    def __init__(self):
+        """
+        Constructor de la clase Menu
+        """
+        self.inventario = Inventario()
 
-    while True:
-        print("\n--- Submenú ---")
-        for i, carpeta in enumerate(sub_carpetas, start=1):
-            print(f"{i} - {carpeta}")
-        print("0 - Volver al menú principal")
+    def mostrar_menu(self):
+        """
+        Muestra las opciones del menú
+        """
+        print("\n=== MENÚ DE INVENTARIO ===")
+        print("1. Agregar producto")
+        print("2. Eliminar producto")
+        print("3. Actualizar producto")
+        print("4. Buscar producto por nombre")
+        print("5. Mostrar inventario")
+        print("6. Salir")
 
-        opcion = input("Seleccione una subcarpeta: ")
+    def ejecutar(self):
+        """
+        Ejecuta el menú principal
+        """
+        while True:
+            self.mostrar_menu()
+            opcion = input("Seleccione una opción: ")
 
-        if opcion == '0':
-            break
-        try:
-            index = int(opcion) - 1
-            if 0 <= index < len(sub_carpetas):
-                mostrar_scripts(os.path.join(ruta_unidad, sub_carpetas[index]))
+            if opcion == "1":
+                self.agregar_producto()
+            elif opcion == "2":
+                self.eliminar_producto()
+            elif opcion == "3":
+                self.actualizar_producto()
+            elif opcion == "4":
+                self.buscar_producto()
+            elif opcion == "5":
+                self.mostrar_inventario()
+            elif opcion == "6":
+                print("Saliendo del sistema...")
+                break
             else:
-                print("⚠ Opción inválida.")
-        except ValueError:
-            print("⚠ Ingrese un número válido.")
+                print("Opción inválida.")
 
+    def agregar_producto(self):
+        """
+        Solicita datos y agrega un producto
+        """
+        id = int(input("ID: "))
+        nombre = input("Nombre: ")
+        cantidad = int(input("Cantidad: "))
+        precio = float(input("Precio: "))
 
-def mostrar_scripts(ruta_sub_carpeta):
-    """
-    Muestra los scripts Python disponibles en la carpeta.
-    """
-    scripts = [f.name for f in os.scandir(ruta_sub_carpeta)
-               if f.is_file() and f.name.endswith('.py')]
+        producto = Producto(id, nombre, cantidad, precio)
+        if self.inventario.agregar_producto(producto):
+            print("Producto agregado correctamente.")
+        else:
+            print("Error: ID duplicado.")
 
-    while True:
-        print("\n--- Scripts disponibles ---")
-        for i, script in enumerate(scripts, start=1):
-            print(f"{i} - {script}")
-        print("0 - Volver")
-        print("9 - Menú principal")
+    def eliminar_producto(self):
+        """
+        Elimina un producto por ID
+        """
+        id = int(input("ID del producto a eliminar: "))
+        if self.inventario.eliminar_producto(id):
+            print("Producto eliminado.")
+        else:
+            print("Producto no encontrado.")
 
-        opcion = input("Seleccione un script: ")
+    def actualizar_producto(self):
+        """
+        Actualiza un producto existente
+        """
+        id = int(input("ID del producto: "))
+        cantidad = int(input("Nueva cantidad: "))
+        precio = float(input("Nuevo precio: "))
 
-        if opcion == '0':
-            break
-        elif opcion == '9':
-            return
-        try:
-            index = int(opcion) - 1
-            if 0 <= index < len(scripts):
-                ruta_script = os.path.join(ruta_sub_carpeta, scripts[index])
-                codigo = mostrar_codigo(ruta_script)
+        if self.inventario.actualizar_producto(id, cantidad, precio):
+            print("Producto actualizado.")
+        else:
+            print("Producto no encontrado.")
 
-                if codigo:
-                    ejecutar = input("¿Desea ejecutar el script? (1 = Sí / 0 = No): ")
-                    if ejecutar == '1':
-                        ejecutar_codigo(ruta_script)
-                    input("\nPresione Enter para continuar...")
-            else:
-                print("⚠ Opción inválida.")
-        except ValueError:
-            print("⚠ Ingrese un número válido.")
+    def buscar_producto(self):
+        """
+        Busca productos por nombre
+        """
+        nombre = input("Nombre a buscar: ")
+        self.inventario.buscar_por_nombre(nombre)
+
+    def mostrar_inventario(self):
+        """
+        Muestra todos los productos
+        """
+        self.inventario.mostrar_todos()
 
 
 # Punto de entrada del programa
 if __name__ == "__main__":
-    mostrar_menu()
+    menu = Menu()
+    menu.ejecutar()
