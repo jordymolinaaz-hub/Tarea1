@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "nombre": "Redmi",
+        "cantidad": 23,
+        "precio": 300.0
+    },
+    {
+        "id": 2,
+        "nombre": "motorola",
+        "cantidad": 16,
+        "precio": 300.0
+    },
+    {
+        "id": 3,
+        "nombre": "Infinix",
+        "cantidad": 20,
+        "precio": 350.0
+    }
+]
