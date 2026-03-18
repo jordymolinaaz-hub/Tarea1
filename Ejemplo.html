@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi página HTML5</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f4f8;
+        color: #333;
+      }
+
+      header {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      header h1 {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+      }
+
+      header p {
+        margin-top: 8px;
+        font-size: 1rem;
+        opacity: 0.85;
+      }
+
+      nav {
+        background-color: #4a4a8a;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding: 12px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.95rem;
+        transition: color 0.3s;
+      }
+
+      nav a:hover {
+        color: #f0c040;
+      }
+
+      section {
+        max-width: 860px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      article {
+        background-color: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 24px;
+      }
+
+      article h2 {
+        color: #667eea;
+        margin-bottom: 12px;
+        font-size: 1.4rem;
+      }
+
+      article p {
+        line-height: 1.7;
+        font-size: 1rem;
+        color: #555;
+      }
+
+      .badge {
+        display: inline-block;
+        background-color: #667eea;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+      }
+
+      footer {
+        background-color: #2d2d5e;
+        color: #ccc;
+        text-align: center;
+        padding: 20px;
+        font-size: 0.9rem;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <header>
+      <h1>Bienvenido a HTML5</h1>
+      <p>Estructura semántica, moderna y accesible</p>
+    </header>
+
+    <nav>
+      <a href="#">Inicio</a>
+      <a href="#">Historia</a>
+      <a href="#">Etiquetas</a>
+      <a href="#">Contacto</a>
+    </nav>
+
+    <section>
+      <article>
+        <span class="badge">Introducción</span>
+        <h2>¿Qué es HTML5?</h2>
+        <p>HTML5 es la quinta versión del lenguaje de marcado estándar para la web. 
+        Permite crear páginas más semánticas, accesibles e interactivas sin necesidad 
+        de plugins externos.</p>
+      </article>
+
+      <article>
+        <span class="badge">Ventajas</span>
+        <h2>¿Por qué usar HTML5?</h2>
+        <p>Incluye etiquetas semánticas como <strong>&lt;header&gt;</strong>, 
+        <strong>&lt;section&gt;</strong>, <strong>&lt;article&gt;</strong> y 
+        <strong>&lt;footer&gt;</strong>, mejorando la estructura y el SEO de 
+        cualquier sitio web.</p>
+      </article>
+    </section>
+
+    <footer>
+      <p>© 2025 — Mi página HTML5 | Hecho con ❤️ y HTML5</p>
+    </footer>
+
+  </body>
+</html>
